@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+	<small>{{ message }}</small>
+	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+
+{% if users %}
+
+	{% for user in users %}
+<div class="card shadow">
+	<div class="card-body">
+<div class="row">
+	<a class="stretched-link" href="{{ url_for('detail', id=user.id) }}"></a>
+	<div class="col-2">
+			{% if user.menu.image %}
+	<img src="{{ url_for('static', filename='files/' + user.menu.image ) }}" width="50" height="50">
+			{% else %}
+	<img src="/static/default/spoon-folk.png" width="50" height="50">
+			{% endif %}
+	</div>
+	<div class="col-7">
+	<span class="fs-5">{{ user.menu.dish }} - </span>{{ user.user.name }}<br><small class="fw-light">{{ user.time }}</small>
+	</div>
+	<div class="col-3">
+		{% if user.status %}
+	<span class="badge bg-secondary">{{ user.status }}</span>
+		{% else %}
+	<span class="badge bg-success">new</span>
+		{% endif  %}
+	</div>
+</div>
+	</div>
+</div>
+<br>
+	{% endfor %}
+	
+{% else %}
+	
+<center><a class="btn btn-sm" href="{{ url_for('edit_user', id=current_user.id) }}">Edit Profile</a></center><br>
+
+
+	{% for order in orders %}
+<div class="card shadow">
+	<div class="card-body">
+<div class="row">
+<a class="stretched-link" href="{{ url_for('detail', id=order.id) }}"></a>
+	<div class="col-2">
+			{% if order.menu.image %}
+	<img src="{{ url_for('static', filename='files/' + order.menu.image)}}" width="50" height="50">
+			{% else %}
+	<img src="/static/default/spoon-folk.png" width="50" height="50">
+			{% endif %}
+	</div>
+	<div class="col-7">
+		<span class="fs-5">{{ order.menu.dish }}</span>
+		<br><small class="fw-light">{{ order.time }}</small>
+	</div>
+	<div class="col-3">
+		{% if order.status %}
+<span class="badge bg-secondary">{{ order.status }}</span>
+		{% endif  %}
+	</div>
+</div>
+	</div>
+</div><br>
+	{% endfor %}
+
+{% endif %}
+	
+{% endblock %}
