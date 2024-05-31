@@ -5,7 +5,7 @@
 	<center><small>Messages are end-to-end with the Admin</small></center>
 </div>
 
-<br><br>
+<br>
 
 {% for chat in chats %}
 	{% if chat.admin == "admin" %}
@@ -17,19 +17,15 @@
 
 
 <form method='POST'>
- 	<div class="row">
- 		<div class="col-10 m-2 position-fixed bottom-0">
-	{{ form.text(class="form-control form-control-lg rounded-pill", rows="1",placeholder="Message") }}
+    <div class="input-group m-1 position-fixed bottom-0">
 	{% if session["account"] == "Admin" %}
 	<input type="hidden" value="admin" name="name">
 	{% else %}
 	<input type="hidden" value="user" name="name">
 	{% endif %}
-		</div>
-		<div class="col-2 m-2 position-fixed bottom-0 end-0">
-	{{ form.submit(class="btn btn-lg rounded-circle btn-secondary ") }}
-		</div>
-	</div>
+	{{form.text(class="form-control form-control-lg", rows="1",placeholder="Message") }}
+	{{ form.submit(class="btn btn-lg btn-secondary ") }}
+    </div>
 </form>
 
 {% endblock %}

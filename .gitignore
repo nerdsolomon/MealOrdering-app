@@ -1,3 +1,6 @@
 /open
 /_pycache_
 /instance
+/static/script.js
+/static/styles.css
+/static/files

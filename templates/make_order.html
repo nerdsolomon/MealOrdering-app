@@ -3,37 +3,66 @@
 
 {% for message in get_flashed_messages() %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-	<small>{{ message }}</small>
+    {{ message }}
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
 
+<div class="row">
+    <div class="col-sm-6 mb-sm-0">
 
-<div class="card shadow" style="width: 24rem;">
-	{% if menu.image %}
-		<img src="{{ url_for('static', filename='files/' + menu.image ) }}" class="card-img-top">
+<div class="card shadow">
+    {% if menu.image %}
+    <img src="{{ url_for('static', filename='files/' + menu.image ) }}" class="card-img-top">
 	{% else %}
-		<img src="/static/default/spoon-folk.png" class="card-img-top">
+	<img src="/static/default/spoon-folk.png" class="card-img-top">
 	{% endif %}
 	<div class="card-body">
-	<span class="fs-5">{{ menu.dish }}</span><br>
-	<span class="fs-6 text-success">${{ menu.price }}</span>
+    	<span class="fs-5 fw-bold">{{ menu.dish }}</span><br>
+    	<span class="fs-5 text-success">NGN {{ menu.price }}</span>
+    	<p class="fst-italic">
+    	    <b>Includes : </b><br>
+    	    Some stuff about the dish is written here...
+        </p>
+	
+    {% if current_user.is_authenticated %}
+	{% if session["account"] == "Admin" %}
+    <a class="btn" href="{{ url_for('edit_price', id=menu.id) }}">Edit Price</a>
+    <a class="btn text-danger" href="{{ url_for('del_meal', id=menu.id) }}">Delete</a>
+	{% endif %}
+    {% endif %}
 	</div>
 </div>
-	<br>
-<form method = 'POST' enctype="multipart/form-data">
+    
+    </div>
+    <div class="col-sm-6">
 	
-	{{ form.hidden_tag() }}
-	
-	{{ form.quantity(style="width: 24rem;", placeholder="Quantity", class='form-control') }}
-	<br/>
-	{{ form.location(style="width: 24rem;", placeholder="Address", class='form-control') }}
-	<br/>
-	{{ form.comment(style="width: 24rem;", placeholder="Message", class='form-control') }}
-	<br/>
-	<center>{{ form.submit(style="width: 24rem;", class='form-control btn-secondary') }}</center>
+{% if current_user.is_authenticated %}
+	{% if session["account"]  == "User" %}
+<div class="card shadow">
+    <div class="card-body">
+    <form method = 'POST'>
+	    {{ form.hidden_tag() }}
+    	{{ form.quantity(placeholder="Quantity", class='form-control') }}
+    	<br/>	
+    	{{ form.location(placeholder="Address", class='form-control') }}
+    	<br/>
+    	{{ form.comment(placeholder="Message", class='form-control') }}
+    	<br/>
+	    <center>{{ form.submit(class='form-control btn-secondary') }}</center>
+    </form>
+    </div>
+</div>
+	{% endif %}
+{% else %}
 
-</form>
+<br><br>
+	<p class="fw-light text-secondary text-center">
+	    Login account to place your order
+    </p>
+{% endif  %}
 
+    </div>
+</div>
 
 {% endblock %}

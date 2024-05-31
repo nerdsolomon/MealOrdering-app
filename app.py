@@ -185,7 +185,6 @@ def edit_price(id):
 	
 	
 @app.route('/make-order/<int:id>', methods=["POST", "GET"])
-@login_required
 def make_order(id):
 	form = OrderForm()
 	menu = Menu.query.filter_by(id=id).first()
@@ -275,18 +274,17 @@ def admin_login():
 
 
 
-@app.route('/admin', methods=["POST", "GET"])
-def admin():
-	form = AdminForm()
-	if form.validate_on_submit():
-		admin = Admin(username=form.username.data,password=generate_password_hash(form.password.data))
-		try:
-			db.session.add(admin)
-			db.session.commit()
-			flash("Sign up was successful")
-		except:
-			flash("An error occurred, Admin not added. Try again...")
-	return render_template("admin.html", form=form)
+def add_admin():
+	username = input("Input Username : ")
+	password = input("Input Password : ")
+	confirm_password = input("Confirm Password : ")
+	if password == confirm_password:
+	    admin = Admin(username=username,password=generate_password_hash(password))
+	    db.session.add(admin)
+	    db.session.commit()
+	    return f"{username} added as an Admin."
+	else:
+	    return "Passwords don't match. Try again."
 
 
 

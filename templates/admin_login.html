@@ -3,37 +3,25 @@
 
 {% for message in get_flashed_messages() %}
 <div class="alert alert-warning alert-dismissible fade show" role="alert">
-	<small>{{ message }}</small>
+	{{ message }}
 	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
 {% endfor %}
 
 <center>
-<div class="card shadow" style="width: 22rem;">
+<div class="card shadow" style="width: 24rem;">
 	<div class="card-body">
 
-	<p class="fs-4 fw-bold text-center">Admin Login</p>
-	<br>
-
 	<form method = 'POST'>
-	
 	{{ form.hidden_tag() }}
-	
-	{{ form.username(placeholder="Username", class='form-control') }}
-	<br/>
-	
-	{{ form.password(placeholder="Password", class='form-control') }}
-	<br/>
-
-	<center>{{ form.submit(class='btn btn-secondary') }}</center>
-	
+	{{ form.username(placeholder="Username", class='form-control') }}<br/>
+	{{ form.password(placeholder="Password", class='form-control') }}<br/>
+    {{ form.submit(class='btn btn-secondary') }}
 	</form>
 
 	</div>
 </div>
-	<br>
-	<span>Don't have an account?</span>
-	<a class="btn" href="/admin">Register</a>
+
 </center>
 
 {% endblock %}

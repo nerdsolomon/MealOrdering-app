@@ -34,4 +34,4 @@ class MealForm(FlaskForm):
 class ChatForm(FlaskForm):
 	text = TextAreaField()
 	image = FileField()
-	submit = SubmitField("💬")
+	submit = SubmitField("Send")
