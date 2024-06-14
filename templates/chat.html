@@ -1,31 +1,25 @@
 {% extends "base.html" %}
 {% block content %}
 
-<div class="alert alert-warning fade show" role="alert">
-	<center><small>Messages are end-to-end with the Admin</small></center>
+<div class="alert alert-warning text-center">
+    <small>Messages are end-to-end with the Admin</small>
 </div>
 
-<br>
-
 {% for chat in chats %}
-	{% if chat.admin == "admin" %}
-<span class="badge bg-success text-start fw-normal" style="white-space:pre-wrap !important;"><span class="fs-5">{{ chat.text }}</span><br><small class="fw-light text-dark">{{ chat.datetime }}</small></span><br><br>
-	{% else %}
-<span class="badge bg-primary text-start fw-normal" style="white-space:pre-wrap !important;"><span class="fs-5">{{ chat.text }}</span><br><small class="fw-light text-dark">{{ chat.datetime }}</small></span><br><br>
-	{% endif %}
+    <span class="badge fs-6 text-start mb-2 fw-normal {% if chat.admin %} bg-secondary {% else %} bg-success float-end {% endif %}" style="white-space:pre-wrap !important;">{{ chat.text }}</span><br>
 {% endfor %}
 
-
-<form method='POST'>
-    <div class="input-group m-1 position-fixed bottom-0">
-	{% if session["account"] == "Admin" %}
-	<input type="hidden" value="admin" name="name">
-	{% else %}
-	<input type="hidden" value="user" name="name">
-	{% endif %}
-	{{form.text(class="form-control form-control-lg", rows="1",placeholder="Message") }}
-	{{ form.submit(class="btn btn-lg btn-secondary ") }}
-    </div>
-</form>
-
+<div class="offcanvas show offcanvas-bottom bg-dark" data-bs-scroll="true" style="height:auto;"data-bs-backdrop="false">
+    <div class="offcanvas-body text-center" style='padding: 5px;'>
+    <form method='POST'>
+        <div class="input-group gap-2">
+        {% if account == "Admin" %}
+        <input type="hidden" value="{{ current_user.name }}" name="string">
+    	{% endif %}
+    	{{form.text(class="form-control rounded", rows="1",placeholder="Message") }}
+    	<button type="submit" class="btn btn-success rounded">Send</button>
+        </div>
+    </form>
+    <div>
+</div>
 {% endblock %}

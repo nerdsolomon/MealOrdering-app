@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+{% for message in get_flashed_messages() %}
+<div class="alert alert-success alert-dismissible show" role="alert">
+	{{ message }}
+	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+
+<p class="display-6 fw-bold text-secondary">Cart</p>
+
+{% for cart in carts %}
+<div class="card mb-2">
+    <a class="stretched-link" href="#id{{ cart.id }}" data-bs-toggle="modal"></a>
+  <div class="card-body" style='padding: 5px;'>
+    <div class="row">
+	    <div class="col-2">
+		{% if cart.item.image %}
+	    <img src="{{ url_for('static', filename='storage/' + cart.item.image ) }}" width="50" class="rounded">
+	    {% else %}
+	    <img src="{{ url_for('static', filename='default/dish.png' ) }}" width="50" class="rounded">
+	    {% endif %}
+    	</div>
+	    <div class="col-10">
+	    <b>{{ cart.item.name }}</b>
+	    <br>
+	    <small class="fw-light text-dark">{{ cart.date }}</small>
+	    {% if cart.status %}
+	    <span class="badge float-end {% if cart.status == 'Delivered' %} bg-success {% elif cart.status == 'Cancelled' %} bg-danger {% else %} bg-secondary {% endif %}">{{ cart.status }}</span>
+		{% endif %}
+	    </div>
+	</div>
+  </div>
+</div>
+
+  <div class="modal" id="id{{ cart.id }}" aria-hidden="true" tabindex="-1">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <span class="modal-title fs-5 fw-bold">Detail</span>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+          <div class="modal-body">
+            <div class="row">
+              <div class="col-4">
+                  <img src="{{ url_for('static', filename='storage/'+cart.item.image ) }}" width="100" class="rounded">
+              </div>
+              <div class="col">
+                <small>
+                  Item : {{ cart.item.name }}<br>
+                  Quantity : {{ cart.quantity }}<br>
+                  Status : {{ cart.status }}<br>
+                  Deliver to : {{ cart.description }}
+                </small>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+           <a class="btn btn-sm btn-danger {% if cart.status %} disabled {% endif %}" href="{{ url_for('cart_delete',id=cart.id) }}">Cancel</a>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endfor  %}
+
+{% endblock %}

@@ -1,13 +1,15 @@
 {% extends "base.html" %}
 {% block content %}
 
+<p class="display-6 fw-bold text-secondary">Chats</p>
+
 <div class="list-group-flush">
-	{% for user in chats %}
-	<div class="list-group-item">
-<a class="stretched-link" href="{{ url_for('chat', id=user.user.id) }}"></a>
-		<span class="fs-5">{{ user.user.name }}</span><br>
-		<small class="fw-light">{{ user.datetime }}</small>
-</div>
+	{% for chat in chats %}
+	<div class="list-group-item fw-bold">
+    <a class="stretched-link" href="{{ url_for('chat', id=chat.user.id) }}"></a>
+	{{ chat.user.name }}<br>
+	<small class="fw-normal text-secondary">{{ chat.date }}</small>
+    </div>
 	{% endfor %}
 </div>
 

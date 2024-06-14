@@ -1,0 +1,95 @@
+{% extends "base.html" %}
+{% block content %}
+
+<span class="display-6 fw-bold text-secondary">Menu Setting</span>
+<a class="btn text-primary" href="#Add" data-bs-toggle="modal">Add</a>
+
+<div class="table-responsive">
+<table class="table table-hover table-sm table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Image</th>
+      <th scope="col">Name</th>
+      <th scope="col">Price</th>
+      <th scope="col">Category</th>
+      <th scope="col">Content</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+	{% for item in items %}
+    <tr>
+      <td><img src="{{ url_for('static', filename='storage/' + item.image ) }}" width="50"></td>
+   	<td>{{ item.name }}</td>
+   	<td>{{ item.price }}</td>
+   	<td>{{ item.category }}</td>
+   	<td>{{ item.content }}</td>
+   	<td>
+   	    <div class="dropdown float-end">
+		       <a class="dropdown-toggle"></a>
+		       <div class="dropdown-content" style=" right: 0;">
+		    	  <a href="#form{{ item.id }}"  data-bs-toggle="modal">Edit</a>
+		    	  <a href="{{url_for('item_delete', id=item.id)}}">Delete</a>
+			   </div>
+		    </div>
+	   </td>
+     </tr>
+<div class="modal" id="form{{ item.id }}" aria-hidden="true" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title fs-5">Edit Item</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+            <form method='POST'>
+                <input type="hidden" value="{{ item.id }}" name="id">
+                <input type="hidden" value="edit" name="nan">
+                {{ form.hidden_tag() }}
+            	{{ form.string(placeholder="Name", value=item.name, class='form-control') }}<br>
+	            {{ form.number(placeholder="Price", value=item.price, class='form-control') }}<br>
+        	    <select class="form-select" name="type">
+                	<option >{{ item.category }}</option>
+                    <option value="Dishes">Dishes</option>
+                    <option value="Pastries">Pastries</option>
+	                <option value="Drinks & Cocktails">Drinks & Cocktails</option>
+                </select><br>
+                <textarea class='form-control' placeholder="Content" name="text">{{ item.content }}</textarea><br>
+            	{{ form.submit(class='btn btn-secondary') }}
+            </form>
+      </div>
+  </div>
+</div>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+
+
+<div class="modal" id="Add" aria-hidden="true" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <span class="modal-title fs-5">Add Item</span>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body text-center">
+        <form method = 'POST' enctype="multipart/form-data">
+        	{{ form.hidden_tag() }}
+        	<input type="hidden" value="add" name="nan">
+        	{{ form.string(placeholder="Item", class='form-control') }}<br>
+	        {{ form.number(placeholder="Price", class='form-control') }}<br>
+	        {{ form.text(placeholder="Content", class='form-control') }}<br>
+	        <select class="form-select" name="type">
+        	    <option >Category</option>
+        	    <option value="Dishes">Dishes</option>
+        	    <option value="Pastries">Pastries</option>
+	        	<option value="Drinks & Cocktails">Drinks & Cocktails</option>
+        </select><br>
+        	{{ form.file(class='form-control') }}<br>
+        	{{ form.submit(class='btn btn-secondary') }}
+        </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

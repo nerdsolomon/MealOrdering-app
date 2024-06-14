@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+
+    
+<p class="display-6 fw-bold text-secondary">Members</p>
+
+<div class="table-responsive">
+<table class="table table-hover table-sm table-bordered">
+  <thead>
+    <tr>
+      <th scope="col">Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Phone</th>
+      <th scope="col">Role</th>
+    </tr>
+  </thead>
+  <tbody class="table-group-divider">
+	{% for member in members %}
+    <tr>
+      <td>{{ member.name }}</td>
+      <td>{{ member.email }}</td>
+      <td>{{ member.phone }}</td>
+      <form method="POST">
+       <input type="hidden" value="{{ member.id }}" name="id">
+       {{ form.hidden_tag() }}
+   	<td>
+   	<div class="input-group" style="width:8rem;">
+   	<select class="form-select form-select-sm" name="role" style="border: 0; background-color: transparent; border-radius:0;">
+        	    <option >{{ member.role }}</option>
+        	    <option value="Admin">Admin</option>
+        	    <option value="User">User</option>
+        </select>
+        <button class='btn btn-sm btn-secondary' type="submit">OK</button>
+        </div>
+       </td>
+       </form>
+      <td><a href="{{url_for('user_delete',id=member.id)}}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>
+<br><br>
+
+
+{% endblock %}
