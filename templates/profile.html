@@ -8,55 +8,56 @@
 </div>
 {% endfor %}
 
-<p class="display-6 fw-bold text-secondary">Profile</p>
+<p class="fw-bold text-secondary">Profile</p>
 
-<div class="card text-center">
-    <div class="card-header fw-bold">Edit Profile</div>
-    <div  class="card-body">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <input type="hidden" name="name" value="profile">
-            {{ form.string(class="form-control", placeholder="Full Name",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.number(class="form-control", placeholder="Phone",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.email(class="form-control", placeholder="Email",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.password(class="form-control", placeholder="Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.submit(class="btn btn-secondary") }}
-        </form>
+<div class="card">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-5 text-center">
+                <img src="{{ url_for('static',filename='default/user.png') }}" class="rounded-circle mb-5" width="115">
+                <form method="POST">
+                    <button class="btn btn-sm btn-secondary" type="submit">Edit</button>
+            </div>
+            <div class="col-7">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" name="name" value="profile">
+                    {{ form.string(class="form-control form-control-sm", placeholder="Full Name",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+                    {{ form.number(class="form-control form-control-sm", placeholder="Phone",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+                    {{ form.email(class="form-control form-control-sm", placeholder="Email",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+                    {{ form.password(class="form-control form-control-sm", placeholder="Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+</div><br>
 
-<br>
-
+<p class="fw-bold text-secondary">Change Password</p>
 <div class="card text-center">
-    <div class="card-header fw-bold">Change Password</div>
     <div class="card-body">
         <form method="POST">
             {{ form.hidden_tag() }}
             <input type="hidden" name="name" value="password">
-            {{ form.old(class="form-control", placeholder="Old Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.password(class="form-control", placeholder="New Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.check(class="form-control", placeholder="Confirm Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.submit(class="btn btn-secondary") }}
+            {{ form.old(class="form-control form-control-sm", placeholder="Old Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+            {{ form.password(class="form-control form-control-sm", placeholder="New Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+            {{ form.check(class="form-control form-control-sm", placeholder="Confirm Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
+            {{ form.submit(class="btn btn-sm btn-secondary") }}
         </form>
     </div>
 </div>
-
 <br><br>
 
- <a class="btn btn-danger form-control" data-bs-toggle="modal" href="#del">Delete Profile</a>
+ <a class="btn-danger btn form-control form-control-sm" data-bs-toggle="modal" href="#del">Delete Profile</a>
 
-  <div class="modal modal-sm" id="del" aria-hidden="true" tabindex="-1">
+  <div class="modal modal-sm" id="del" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-          <div class="modal-body">
+          <div class="modal-body text-center">
             <p>Are you sure you want to delete your profile?</p>
-          </div>
-          <div class="modal-footer">
-          <a type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</a>
-           <a class="btn btn-danger btn-sm" href="{{url_for('user_delete',id=current_user.id)}}">Delete</a>
+            <a type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</a>
+            <a class="btn btn-danger btn-sm" href="{{url_for('user_delete',id=current_user.id)}}">Delete</a>
           </div>
         </div>
       </div>
     </div>
-<br><br>
+
 {% endblock %}

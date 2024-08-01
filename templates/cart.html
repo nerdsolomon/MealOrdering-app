@@ -4,64 +4,64 @@
 {% for message in get_flashed_messages() %}
 <div class="alert alert-success alert-dismissible show" role="alert">
 	{{ message }}
-	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+	<button type="button" class="btn-close" data-bs-dismiss="alert"></button>
 </div>
 {% endfor %}
 
-<p class="display-6 fw-bold text-secondary">Cart</p>
+<p class="fw-bold text-secondary">Cart</p>
 
+<div class="list-group-flush">
 {% for cart in carts %}
-<div class="card mb-2">
+  <div class="list-group-item">
     <a class="stretched-link" href="#id{{ cart.id }}" data-bs-toggle="modal"></a>
-  <div class="card-body" style='padding: 5px;'>
-    <div class="row">
-	    <div class="col-2">
-		{% if cart.item.image %}
-	    <img src="{{ url_for('static', filename='storage/' + cart.item.image ) }}" width="50" class="rounded">
-	    {% else %}
-	    <img src="{{ url_for('static', filename='default/dish.png' ) }}" width="50" class="rounded">
-	    {% endif %}
-    	</div>
-	    <div class="col-10">
-	    <b>{{ cart.item.name }}</b>
-	    <br>
-	    <small class="fw-light text-dark">{{ cart.date }}</small>
-	    {% if cart.status %}
-	    <span class="badge float-end {% if cart.status == 'Delivered' %} bg-success {% elif cart.status == 'Cancelled' %} bg-danger {% else %} bg-secondary {% endif %}">{{ cart.status }}</span>
-		{% endif %}
-	    </div>
-	</div>
+	<b>{{ cart.quantity }} | {{ cart.item.name }}</b><br>
+	<small class="fw-light text-success">NGN {{ cart.cost }}</small>
+	{% if cart.status %}
+	<span class="badge float-end {% if cart.status == 'Delivered' %} bg-success {% elif cart.status == 'Cancelled' %} bg-danger {% else %} bg-secondary {% endif %}">{{ cart.status }}</span>
+	{% endif %}
   </div>
-</div>
 
   <div class="modal" id="id{{ cart.id }}" aria-hidden="true" tabindex="-1">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title fs-5 fw-bold">Detail</span>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
           <div class="modal-body">
-            <div class="row">
-              <div class="col-4">
-                  <img src="{{ url_for('static', filename='storage/'+cart.item.image ) }}" width="100" class="rounded">
-              </div>
-              <div class="col">
-                <small>
-                  Item : {{ cart.item.name }}<br>
-                  Quantity : {{ cart.quantity }}<br>
-                  Status : {{ cart.status }}<br>
-                  Deliver to : {{ cart.description }}
-                </small>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-           <a class="btn btn-sm btn-danger {% if cart.status %} disabled {% endif %}" href="{{ url_for('cart_delete',id=cart.id) }}">Cancel</a>
+              <span class="fs-5 fw-bold">Detail</span>
+              <button type="button" class="btn-close float-end" data-bs-dismiss="modal"></button><br><br>
+                <img src="{{ url_for('static', filename='storage/'+cart.item.image ) }}" class="card-img rounded">
+                <table class="table table-hover table-sm table-borderless">
+                  <tbody>
+	                <tr>
+                      <td>Date</td>
+                      <td>{{ cart.date }}</td>
+                    </tr>
+	                <tr>
+                      <td>Item</td>
+                      <td>{{ cart.item.name }}</td>
+                    </tr>
+	                <tr>
+                      <td>Quantity</td>
+                      <td>{{ cart.quantity }}</td>
+                    </tr>
+                    <tr>
+                      <td>Cost</td>
+                      <td>NGN {{ cart.cost }}</td>
+                    </tr>
+                    <tr>
+                      <td>Deliver to </td>
+                      <td>{{ cart.description }}</td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td>{{ cart.status }}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              <center><a class="btn btn-sm btn-danger {% if cart.status %} disabled {% endif %}" href="{{ url_for('cart_delete',id=cart.id) }}">Cancel</a></center>
           </div>
         </div>
       </div>
     </div>
 {% endfor  %}
+</div>
 
 {% endblock %}

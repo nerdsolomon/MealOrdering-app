@@ -1,5 +1,5 @@
 from flask import render_template, redirect, flash, request, session, url_for, send_from_directory
-from model import app, db, date, User, Order, Item, Chat
+from model import app, db, date, User, Order, Item
 from functions import crop_image, allowed_file, ALLOWED_EXTENSIONS
 from webform import Forms
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
@@ -15,10 +15,7 @@ login_manager.login_view = "home"
 
 @login_manager.user_loader
 def load_user(id):
-	if session:
-		return User.query.get(int(id))
-	else:
-		return None
+	return User.query.get(int(id))
 
 FILE_FOLDER = "static/storage"
 if not os.path.exists(FILE_FOLDER):
@@ -38,12 +35,10 @@ def remove(var):
 def base():
     time = date.strftime('%Y')
     account = session.get("account")
+    form = Forms()
     if current_user.is_authenticated and account:
-        if account == "Admin":
-            return dict(account=account, time=time)
-        elif account == "User":
-            return dict(account=account, time=time)
-    return dict(time=time)
+        return dict(account=account, time=time)
+    return dict(time=time, form=form)
 
 
 @app.route('/', methods=["POST", "GET"])
@@ -67,37 +62,24 @@ def home():
         elif form_type == "signup":
             user = User(name=form.string.data, phone=form.number.data, email=form.email.data, password=generate_password_hash(form.password.data))
             store(user)
-    form.string.data, form.email.data, form.number.data, form.password.data = "","","",""
     return render_template("home.html", form=form)
 
-
-@app.route('/signout')
-@login_required
-def signout():
-	logout_user()
-	return redirect('/')
-
     
-@app.route("/items/<category>")
+@app.route("/items/<category>", methods=["POST", "GET"])
 def items(category):
-    items = Item.query.order_by(-Item.id).filter_by(category=category)
-    return render_template("items.html", items=items)
-    
-    
-@app.route('/item/<int:id>', methods=["POST", "GET"])
-def item(id):
     form = Forms()
-    item = Item.query.filter_by(id=id).first()
+    items = Item.query.order_by(-Item.id).filter_by(category=category)
     if request.method == "POST":
-        order = Order(item_id=id, user_id=current_user.id, quantity=form.number.data, description=form.text.data)
+        order = Order(item_id=request.form["num"], user_id=current_user.id, quantity=form.number.data, cost=int(request.form["cost"])*int(form.number.data), description=form.text.data)
         store(order)
         flash('Your order is placed.')
         return redirect(url_for("cart", id=current_user.id))
-    return render_template("item.html", item=item, form=form)
+    return render_template("items.html", items=items, form=form)
     
    
-@app.route("/menu/setting", methods=["POST", "GET"])
-def menu_setting():
+@app.route("/menu-setup", methods=["POST", "GET"])
+@login_required
+def setup():
     form = Forms()
     items = Item.query.order_by(-Item.id)
     if request.method == "POST":
@@ -116,35 +98,19 @@ def menu_setting():
             item.category = request.form["type"]
             item.content = form.text.data
             store(item)
-    return render_template("menu_setting.html", items=items, form=form)
+    return render_template("setup.html", items=items, form=form)
  
  
-@app.route('/members', methods=["POST", "GET"])
-def members():
+@app.route('/users', methods=["POST", "GET"])
+@login_required
+def users():
     form = Forms()
-    members = User.query.order_by(User.id)
+    users = User.query.order_by(User.id)
     if request.method == "POST":
         admin = User.query.filter_by(id=request.form["id"]).first()
         admin.role = request.form["role"]
         store(admin)
-    return render_template("members.html", members=members, form=form)
-
-
-@app.route('/chats')
-def chats():
-	chats = Chat.query.group_by(Chat.user_id).order_by(-Chat.id)
-	return render_template("chats.html", chats=chats)
-
-
-@app.route('/chat/<int:id>', methods=["POST", "GET"])
-def chat(id):
-	form = Forms()
-	chats = Chat.query.filter_by(user_id=id)
-	if request.method == "POST":
-		chat = Chat(user_id=id, admin=form.string.data, text=form.text.data, image=form.file.data)
-		store(chat)
-	form.text.data = ""
-	return render_template("chat.html", chats=chats, form=form)
+    return render_template("users.html", users=users, form=form)
 
 
 @app.route("/user/profile/<int:id>", methods=['POST', 'GET'])
@@ -179,6 +145,7 @@ def profile(id):
     
 
 @app.route('/carts', methods=["POST", "GET"])
+@login_required
 def carts():
 	carts = Order.query.order_by(-Order.id)
 	if request.method == "POST":
@@ -189,9 +156,17 @@ def carts():
 
 
 @app.route('/cart/<int:id>')
+@login_required
 def cart(id):
 	carts = Order.query.filter_by(user_id=id).order_by(-Order.id)
 	return render_template("cart.html", carts=carts)
+
+
+@app.route('/signout')
+@login_required
+def signout():
+	logout_user()
+	return redirect('/')
 
 
 @app.route('/cart/delete/<int:id>')
@@ -207,7 +182,7 @@ def cart_delete(id):
 def user_delete(id):
     user = User.query.filter_by(id=id).first()
     remove(user)
-    return redirect(url_for("members"))
+    return redirect(url_for("users"))
     
     
 @app.route('/item/delete/<int:id>')
@@ -218,4 +193,4 @@ def item_delete(id):
         file_path = os.path.join(app.config["FILE_FOLDER"], item.image)
         os.remove(file_path)
     remove(item)
-    return redirect(url_for("menu_setting"))
+    return redirect(url_for("setup"))

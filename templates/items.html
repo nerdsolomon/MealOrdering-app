@@ -1,13 +1,17 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p class="display-6 fw-bold text-secondary">{{ items.first().category }}</p>
+
+<a class="btn btn-sm fw-bold {% if request.url == request.scheme+'://'+request.host+'/items/Dishes' %} btn-outline-secondary {% endif %}" href="{{ url_for('items',category='Dishes') }}"><img src="{{ url_for('static',filename='default/dish.png') }}" width="20"><span> Dishes</span></a>
+<a class="btn btn-sm fw-bold {% if request.url == request.scheme+'://'+request.host+'/items/Pastries' %} btn-outline-secondary {% endif %}" href="{{ url_for('items',category='Pastries') }}"><img src="{{ url_for('static',filename='default/pastry.png') }}" width="20"><span> Pastries</span></a>
+<a class="btn btn-sm fw-bold {% if request.url == request.scheme+'://'+request.host+'/items/Beverages' %} btn-outline-secondary {% endif %}" href="{{ url_for('items',category='Beverages') }}"><img src="{{ url_for('static',filename='default/drink.png') }}" width="20"><span> Beverages</span></a>
+<br><br>
 
 <div class="row g-1">
 {% for item in items %}
 	<div class="col-sm-3 col-6 mb-sm-0">
 		<div class="card">
-	        <a class="stretched-link" href="{{ url_for('item', id=item.id) }}"></a>
+	        <a class="stretched-link" href="#m{{ item.id }}" data-bs-toggle="modal"></a>
 	        {% if item.image %}
 	        <img src="{{ url_for('static', filename='storage/' + item.image ) }}" class="card-img-top">
 	        {% else %}
@@ -19,8 +23,42 @@
 		    </div>
 		</div>
 	</div>
+	
+  <div class="modal" id="m{{ item.id }}" aria-hidden="true" tabindex="-1">
+      <div class="modal-dialog modal-dialog-sm modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body">
+             <span class="modal-title fs-5 fw-bold">Detail</span>
+             <button type="button" class="btn-close float-end" data-bs-dismiss="modal"></button><br><br>
+                 <img src="{{ url_for('static', filename='storage/' + item.image ) }}" class="card-img-top rounded"><br>
+                 <p class="text-center">
+                    <b class="text-dark fs-5">{{ item.name }}</b><br>
+                    <b class="text-success fs-5">NGN {{ item.price }}</b><br>
+                    <span class="fst-italic">{{ item.content }}</span>
+                </p>
+                {% if account == "User" %}
+                <p class="fw-light fst-italic">Place an order</p>
+                <form method="POST">
+                {{ form.hidden_tag() }}
+                <input type="hidden" value="{{ item.id }}" name="num">
+                <input type="hidden" value="{{ item.price }}" name="cost">
+                {{ form.number(class="form-control", placeholder="Quantity") }}
+                <br>
+                {{ form.text(class="form-control", placeholder="Deliver to...") }}
+                <br>
+                {{ form.submit(class="btn btn-secondary") }}
+                </form>
+                {% else %}
+                <p class="fw-light text-center fst-italic">
+                    Sign in to place an order
+                </p>
+                {% endif %}
+          </div>
+        </div>
+      </div>
+  </div>
 {% endfor %}
 </div>
-<br>
+
 
 {% endblock %}

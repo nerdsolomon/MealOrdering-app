@@ -1,74 +1,75 @@
 {% extends "base.html" %}
 {% block content %}
 
-<p class="display-6 fw-bold text-secondary">Carts</p>
+<p class="fw-bold text-secondary">Carts</p>
 
-<div class="table-responsive">
-<table class="table table-hover table-sm table-bordered">
-  <thead>
-    <tr>
-      <th scope="col">Date</th>
-      <th scope="col">Item</th>
-      <th scope="col">Member</th>
-      <th scope="col">Status</th>
-      <th scope="col">View</th>
-    </tr>
-  </thead>
-  <tbody class="table-group-divider">
-	{% for cart in carts %}
-    <tr>
-      <td>{{ cart.date }}</td>
-      <td>{{ cart.item.name }}</td>
-      <td>{{ cart.user.name }}</td>
-      <td>
-      <form method="POST">
-       <input type="hidden" value="{{ cart.id }}" name="id">
-   	<div class="input-group" style="width:9rem;">
-   	<select class="form-select form-select-sm" name="status" style="border: 0; background-color: transparent; border-radius:0;">
-        	    <option >{{ cart.status }}</option>
-        	    <option value="Delivered">Delivered</option>
-        	    <option value="Processing">Processing</option>
-        	    <option value="Cancelled">Cancelled</option>
-        </select>
-        <button class='btn btn-sm btn-secondary' type="submit">OK</button>
-        </div>
-      </form>
-      </td>
-      <td><a class="btn btn-sm btn-secondary" href="#modal{{ cart.id }}" data-bs-toggle="modal">Open</a></td>
-    </tr>
-    
-    <div class="modal" id="modal{{ cart.id }}" aria-hidden="true" tabindex="-1">
-      <div class="modal-dialog modal-dialog-centered">
+<div class="list-group-flush">
+{% for cart in carts %}
+  <div class="list-group-item">
+      <a class="stretched-link" href="#mod{{ cart.id }}" data-bs-toggle="modal"></a>
+      <b>{{ cart.quantity }} | {{ cart.item.name }}</b><br>
+	  <small class="fw-light">{{ cart.date }}</small>
+	  <span class="badge text-dark float-end">{{ cart.status }}</span>
+  </div>
+  
+ <div class="modal" id="mod{{ cart.id }}" aria-hidden="true" tabindex="-1">
+      <div class="modal-dialog modal-dialog-sm modal-dialog-centered">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title fs-5 fw-bold">Detail</span>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-              </div>
           <div class="modal-body">
-              <div class="row">
-              <div class="col-4">
-                  <img src="{{ url_for('static', filename='storage/' + cart.item.image ) }}" width="100" class="rounded">
-              </div>
-              <div class="col">
-                <small>
-                  Date : {{ cart.date }}<br>
-                  Item : {{ cart.item.name }}<br>
-                  Quantity : {{ cart.quantity }}<br>
-                  Member : {{ cart.user.name }}<br>
-                  Phone : {{ cart.user.phone }}<br>
-                  Deliver to : {{ cart.description }}
-                </small>
-              </div>
-              </div>
+              <span class="modal-title fs-5 fw-bold">Detail</span>
+              <button type="button" class="btn-close float-end" data-bs-dismiss="modal"></button><br>
+              <table class="table table-hover table-sm table-borderless">
+                  <tbody>
+	                <tr>
+                      <td>Date</td>
+                      <td>{{ cart.date }}</td>
+                    </tr>
+	                <tr>
+                      <td>Item</td>
+                      <td>{{ cart.item.name }}</td>
+                    </tr>
+	                <tr>
+                      <td>Quantity</td>
+                      <td>{{ cart.quantity }}</td>
+                    </tr>
+                    <tr>
+                      <td>Cost</td>
+                      <td>NGN {{ cart.cost }}</td>
+                    </tr>
+                	<tr>
+                      <td>User</td>
+                      <td>{{ cart.user.name }}</td>
+                    </tr>
+	                <tr>
+                      <td>Phone</td>
+                      <td>{{ cart.user.phone }}</td>
+                    </tr>
+                    <tr>
+                      <td>Deliver to </td>
+                      <td>{{ cart.description }}</td>
+                    </tr>
+                    <tr>
+                      <td>Status</td>
+                      <td><form method="POST">
+                       <input type="hidden" value="{{ cart.id }}" name="id">
+                   	<div class="input-group gap-2">
+                   	<select class="form-select form-select-sm rounded" name="status" style="widtd: 7rem;">
+                             <option >{{ cart.status }}</option>
+        	                 <option value="Delivered">Delivered</option>
+        	                 <option value="Processing">Processing</option>
+                        	  <option value="Cancelled">Cancelled</option>
+                        </select>
+                        <button class='btn btn-sm rounded btn-secondary' type="submit">Change</button>
+                         </div>
+                        </form></td>
+                    </tr>
+                  </tbody>
+                </table><br>
           </div>
         </div>
       </div>
-    </div>
-    
-    {% endfor %}
-  </tbody>
-</table>
+  </div>
+{% endfor %}
 </div>
-
 
 {% endblock %}

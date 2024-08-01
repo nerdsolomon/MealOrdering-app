@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% block content %}
+
+<p class="fw-bold text-secondary">Users ({{ users.count()}})</p>
+
+<div class="list-group-flush">
+{% for user in users %}
+  <div class="list-group-item">
+    <div class="row">
+	    <div class="col-2">
+		<img src="{{ url_for('static',filename='default/user.png') }}" class="rounded-circle" width="50">
+    	</div>
+	    <div class="col-10">
+	    {{ user.name }}
+	    <div class="dropdown float-end">
+    	    <span class="dropdown-toggle"></span>
+    	    <div class="dropdown-content" style="right:0;">
+    	    <form method="POST">
+            {{ form.hidden_tag() }}
+            <input type="hidden" value="{{ user.id }}" name="id">
+            {% if user.role == "User" %}
+                <input type="hidden" value="Admin" name="role">
+                <button class="btn" type="submit">Make an admin</button>
+            {% else %}
+                <input type="hidden" value="User" name="role">
+                <button class="btn" type="submit">Dismiss admin</button>
+            {% endif %}
+            </form>
+            <a href="{{url_for('user_delete',id=user.id)}}">Delete</a>
+            </div>
+        </div>
+    	<br>
+	    <small class="fw-light text-dark">{{ user.email }}</small>
+	    <span class="badge text-dark float-end">{{ user.role }}</span>
+	    </div>
+	</div>
+  </div>
+{% endfor %}
+</div>
+
+
+
+{% endblock %}

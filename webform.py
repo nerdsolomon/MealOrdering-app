@@ -12,4 +12,4 @@ class Forms(FlaskForm):
     old = PasswordField(validators=[DataRequired()])
     check = PasswordField(validators=[DataRequired()])
     file = FileField()
-    submit = SubmitField("Submit")
+    submit = SubmitField("Done")

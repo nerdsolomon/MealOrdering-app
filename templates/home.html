@@ -1,65 +1,11 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% if current_user.is_authenticated %}
-<a href="/signout" class="btn btn-sm btn-danger">Sign Out</a>
-{% else %}
-<a class="btn btn-sm btn-primary" href="#Signin" data-bs-toggle="modal">Sign In</a>
-{% endif %}
-
-<div class="modal" id="Signin" data-bs-backdrop="static" aria-hidden="true" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5">Sign In</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        {% for message in get_flashed_messages() %}
-        <div class="alert alert-warning alert-dismissible show" role="alert">
-            <small>{{ message }}</small>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        {% endfor %}
-        <form method="POST">
-        {{ form.hidden_tag() }}
-        <input type="hidden" value="signin" name="nan">
-        {{ form.email(class="form-control", placeholder="Email") }}
-        <br>
-        {{ form.password(class="form-control", placeholder="Password") }}
-        <br>
-        {{ form.submit(class="form-control btn-secondary") }}
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button class="form-control btn-primary" data-bs-target="#Signup" data-bs-toggle="modal">Create an account</button>
-      </div>
-    </div>
-  </div>
+{% for message in get_flashed_messages() %}
+<div class="alert alert-warning alert-dismissible show" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>
-<div class="modal" id="Signup" data-bs-backdrop="static" aria-hidden="true" tabindex="-1">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h1 class="modal-title fs-5">Sign Up</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <form method="POST">
-        {{ form.hidden_tag() }}
-        <input type="hidden" value="signup" name="nan">
-        {{ form.string(class="form-control", placeholder="Names") }}
-        <br>
-        {{ form.number(class="form-control", placeholder="Phone") }}
-        <br>
-        {{ form.email(class="form-control", placeholder="Email") }}
-        <br>
-        {{ form.password(class="form-control", placeholder="Password") }}
-        <br>
-        {{ form.submit(class="form-control btn-secondary") }}
-        </form>
-    </div>
-  </div>
-</div>
+{% endfor %}
 
 {% endblock %}

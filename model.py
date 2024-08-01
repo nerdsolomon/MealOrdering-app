@@ -7,7 +7,7 @@ from datetime import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "eatery"
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///eat.db"
+app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///nerdfoods.db"
 
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -26,7 +26,6 @@ class User(db.Model, UserMixin):
 	password = db.Column(db.String, nullable=False)
 	role = db.Column(db.String, default="User")
 	order = db.relationship('Order', backref='user', cascade="all, delete-orphan")
-	chat_id = db.relationship('Chat', backref='user', cascade="all, delete-orphan")
 
 class Item(db.Model):
 	id =  db.Column(db.Integer, primary_key = True)
@@ -43,13 +42,7 @@ class Order(db.Model):
 	user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"))
 	date = db.Column(db.Date, default=date)
 	quantity = db.Column(db.Integer, nullable=False)
+	cost = db.Column(db.Integer, nullable=False)
 	description = db.Column(db.String, nullable=False)
 	status = db.Column(db.String)
 	
-class Chat(db.Model):
-	id = db.Column(db.Integer, primary_key=True)
-	user_id = db.Column(db.Integer, db.ForeignKey('user.id', ondelete="CASCADE"))
-	text = db.Column(db.String)
-	image = db.Column(db.String)
-	admin = db.Column(db.String)
-	date = db.Column(db.Date, default=date)
