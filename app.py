@@ -41,8 +41,13 @@ def base():
     return dict(time=time, form=form)
 
 
-@app.route('/', methods=["POST", "GET"])
+@app.route('/')
 def home():
+    return render_template("home.html")
+
+
+@app.route('/login', methods=["POST", "GET"])
+def login():
     form = Forms()
     if request.method == "POST":
         form_type = request.form["nan"]
@@ -90,14 +95,13 @@ def setup():
             image = crop_image(form.file.data.read())
             image.save(os.path.join(app.config["FILE_FOLDER"], file_name))
             item = Item(name=form.string.data, price=form.number.data, image=file_name, content=form.text.data, category=request.form["type"])
-            store(item)
         elif form_type == "edit":
             item = Item.query.filter_by(id=request.form["id"]).first()
             item.name = form.string.data
             item.price = form.number.data
             item.category = request.form["type"]
             item.content = form.text.data
-            store(item)
+        store(item)
     return render_template("setup.html", items=items, form=form)
  
  
@@ -118,29 +122,16 @@ def users():
 def profile(id):
     form = Forms()
     user = User.query.filter_by(id=id).first()
-
     if request.method == "POST":
         action_type = request.form["name"]
-        if action_type == "profile":
-            if check_password_hash(user.password, form.password.data):
-                user.name = form.string.data
-                user.phone = form.number.data
-                user.email = form.email.data
-                store(user)
-                flash("Profile editted")
-            else:
-                flash("Password incorrect")
-        elif action_type == "password":
-            if check_password_hash(user.password, form.old.data):
-                if form.password.data == form.check.data:
-                    user.password = generate_password_hash(form.password.data)
-                    store(user)
-                    flash("Password updated")
-                else:
-                    flash("Passwords don't match")
-            else:
-                flash("Old password is incorrect")
-    form.string.data, form.email.data, form.number.data = user.name, user.email, user.phone 
+        if action_type == "name":
+            user.name = form.string.data
+        elif action_type == "email":
+            user.email = form.email.data
+        elif action_type == "phone":
+            user.phone = form.number.data
+        store(user)
+    form.string.data, form.email.data, form.number.data = user.name, user.email, user.phone
     return render_template("profile.html", form=form)
     
 

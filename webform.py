@@ -9,7 +9,5 @@ class Forms(FlaskForm):
     email = EmailField(validators=[DataRequired()])
     text = TextAreaField(validators=[DataRequired()])
     password = PasswordField(validators=[DataRequired()])
-    old = PasswordField(validators=[DataRequired()])
-    check = PasswordField(validators=[DataRequired()])
     file = FileField()
     submit = SubmitField("Done")

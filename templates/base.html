@@ -24,13 +24,7 @@
             {% else %}
         <a href="{{ url_for('cart',id=current_user.id) }}"><img src="{{ url_for('static',filename='default/cart.png') }}" width="20"><span class="txt fw-bold" style="padding:15px;">Cart</span></a>
             {% endif %}
-        <div class="dropdown">
-            <a class="dropdown-toggle"><img src="{{ url_for('static',filename='default/user.png') }}" class="rounded-circle" width="20"><span class="txt fw-bold" style="padding:15px;">{{ current_user.role }}</span></a></a>
-            <div class="dropdown-content" style="right: auto;">
-                <a href="{{ url_for('profile',id=current_user.id)}}">Profile</a>
-                <a href="/signout" class="text-danger">Sign Out</a>
-			</div>
-		</div>
+        <a href="{{ url_for('profile',id=current_user.id)}}"><img src="{{ url_for('static',filename='default/user.png') }}" class="rounded-circle" width="20"><span class="txt fw-bold" style="padding:15px;">{{current_user.role}}</span></a>
 		{% else %}
 	 <a href="#Signin" data-bs-toggle="modal"><img src="{{ url_for('static',filename='default/login.png') }}" width="20"><span class="txt fw-bold" style="padding:15px;">Sign In</span></a>
        <div class="modal" id="Signin" data-bs-backdrop="static" aria-hidden="true" tabindex="-1">
@@ -41,7 +35,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form action="/" method="POST">
+                <form action="/login" method="POST">
                 {{ form.hidden_tag() }}
                 <input type="hidden" value="signin" name="nan">
                 {{ form.email(class="form-control", placeholder="Email") }}<br>
@@ -63,7 +57,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
               </div>
               <div class="modal-body">
-                <form action="/" method="POST">
+                <form action="/login" method="POST">
                 {{ form.hidden_tag() }}
                 <input type="hidden" value="signup" name="nan">
                 {{ form.string(class="form-control", placeholder="Names") }}<br>
@@ -86,11 +80,8 @@
 {% endblock %}
         </div>
     </div>
-    <br><br><hr>
-    <center>
-        <small>Copyright ©️ nerdfoods {{ time }}</small><br>
-        <a class="btn btn-sm text-secondary" href="mailto:nerdsolomon@gmail.com"><img src="{{ url_for('static',filename='default/signed.png') }}" width="20"> nerdsolomon</a>
-    </center>
+    <br><hr>
+	<center><a class="btn btn-sm text-secondary" href="mailto:nerdsolomon@gmail.com"><img src="{{ url_for('static',filename='default/signed.png') }}" width="20"> nerdsolomon</a></center>
     <br><br>
    <script src="/static/script.js"></script>
   </body>

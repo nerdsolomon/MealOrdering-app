@@ -48,14 +48,14 @@
              <button type="button" class="btn-close float-end" data-bs-dismiss="modal"></button><br><br>
                  <img src="{{ url_for('static', filename='storage/' + item.image ) }}" class="card-img-top rounded"><br><br>
                  <p>
-                    <b>{{ item.name }}</b><br>
+                    <b>{{ item.name }}</b>
+                    <a class="float-end" href="#fo{{ item.id }}" data-bs-toggle="modal"><img src="{{ url_for('static',filename='default/edit.png') }}" width="12"></a><br>
                     <b class="text-success">NGN {{ item.price }}</b>
                     <b class="float-end">| {{ item.category }}</b><br>
                     <span class="fst-italic">{{ item.content }}</span>
                 </p>
                 <center>
-                    <a class="btn btn-sm btn-outline-dark" href="#fo{{ item.id }}" data-bs-toggle="modal">Edit</a>
-		    	    <a class="btn btn-sm btn-outline-danger" href="{{url_for('item_delete', id=item.id)}}">Delete</a>
+                <a href="{{url_for('item_delete', id=item.id)}}"><img src="{{ url_for('static',filename='default/trash.png') }}" width="15"></a>
 		    	</center>
           </div>
         </div>

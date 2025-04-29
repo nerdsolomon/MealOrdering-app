@@ -1,60 +1,129 @@
 {% extends "base.html" %}
 {% block content %}
 
-{% for message in get_flashed_messages() %}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-	{{ message }}
-	<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
-{% endfor %}
-
 <p class="fw-bold text-secondary">Profile</p>
 
-<div class="card">
-    <div class="card-body">
-        <div class="row">
-            <div class="col-5 text-center">
-                <img src="{{ url_for('static',filename='default/user.png') }}" class="rounded-circle mb-5" width="115">
-                <form method="POST">
-                    <button class="btn btn-sm btn-secondary" type="submit">Edit</button>
-            </div>
-            <div class="col-7">
-                    {{ form.hidden_tag() }}
-                    <input type="hidden" name="name" value="profile">
-                    {{ form.string(class="form-control form-control-sm", placeholder="Full Name",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-                    {{ form.number(class="form-control form-control-sm", placeholder="Phone",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-                    {{ form.email(class="form-control form-control-sm", placeholder="Email",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-                    {{ form.password(class="form-control form-control-sm", placeholder="Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}
-                </form>
-            </div>
-        </div>
-    </div>
+<div class="list-group-flush">
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/usr-icn.png') }}" width="15">
+		<span style="padding:20px;">{{ current_user.name }}</span>
+		<a data-bs-toggle="offcanvas" href="#name"><img src="{{ url_for('static',filename='default/edit.png') }}" width="12"class="float-end"></a>
+	</div>
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/mail.png') }}" width="15">
+		<span style="padding:20px;">{{ current_user.email }}</span>
+		<a data-bs-toggle="offcanvas" href="#email"><img src="{{ url_for('static',filename='default/edit.png') }}" width="12" class="float-end"></a>
+	</div>
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/phone.png') }}" width="15">
+		<span style="padding:20px;">+234{{ current_user.phone }}</span>
+		<a data-bs-toggle="offcanvas" href="#num"><img src="{{ url_for('static',filename='default/edit.png') }}" width="12" class="float-end"></a>
+	</div>
 </div><br>
 
-<p class="fw-bold text-secondary">Change Password</p>
-<div class="card text-center">
-    <div class="card-body">
-        <form method="POST">
-            {{ form.hidden_tag() }}
-            <input type="hidden" name="name" value="password">
-            {{ form.old(class="form-control form-control-sm", placeholder="Old Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.password(class="form-control form-control-sm", placeholder="New Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.check(class="form-control form-control-sm", placeholder="Confirm Password",style="border: 0; border-radius:0; border-bottom: 0.15px solid #ced4da;") }}<br>
-            {{ form.submit(class="btn btn-sm btn-secondary") }}
-        </form>
-    </div>
+<p class="fw-bold text-secondary">Website information</p>
+
+<div class="list-group-flush">
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/terms.png') }}" width="15">
+		<span style="padding:20px;">Terms of service</span>
+		<a class="stretched-link" href="#"></a>
+	</div>
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/secure.png') }}" width="15">
+		<span style="padding:20px;">Data Security</span>
+		<a class="stretched-link" href="#"></a>
+	</div>
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/phone.png') }}" width="15">
+		<span style="padding:20px;">Contact</span>
+		<a class="stretched-link" href="#"></a>
+	</div>
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/info.png') }}" width="15">
+		<span style="padding:20px;">About</span>
+		<a class="stretched-link" href="#"></a>
+	</div>
+</div><br>
+
+<p class="fw-bold text-secondary">Account management</p>
+
+<div class="list-group-flush">
+	<div class="list-group-item">
+		<img src="{{ url_for('static',filename='default/key.png') }}" width="15">
+		<span style="padding:20px;">Change password</span>
+		<a class="stretched-link" href="#"></a>
+	</div>
+	<div class="list-group-item">
+	<a data-bs-toggle="modal" class="stretched-link" href="#signout"></a>
+		<img src="{{ url_for('static',filename='default/logout.png') }}" width="15">
+		<span style="padding:20px;">Sign out</span>
+	</div>
+	<div class="list-group-item">
+		<a data-bs-toggle="modal" class="stretched-link" href="#del"></a>
+		<img src="{{ url_for('static',filename='default/trash.png') }}" width="15">
+		<span style="padding:20px;">Delete account</span>
+	</div>
 </div>
-<br><br>
 
- <a class="btn-danger btn form-control form-control-sm" data-bs-toggle="modal" href="#del">Delete Profile</a>
+ <div class="offcanvas offcanvas-bottom" id="name" style="height:auto;">
+       <div class="offcanvas-body">
+           <form method='POST'>
+           	<div class="input-group gap-2">
+                {{ form.hidden_tag() }}
+				<input type="hidden" name="name" value="name">
+				{{ form.string(class="form-control") }}
+                <button type="submit" class="btn fw-bold">Done</button>
+               </div>
+          </form>
+      </div>
+ </div>
 
-  <div class="modal modal-sm" id="del" tabindex="-1">
+ <div class="offcanvas offcanvas-bottom" id="num" style="height:auto;">
+       <div class="offcanvas-body">
+           <form method='POST'>
+           	<div class="input-group gap-2">
+                {{ form.hidden_tag() }}
+				<input type="hidden" name="name" value="name">
+				{{ form.number(class="form-control")}}
+                <button type="submit" class="btn fw-bold">Done</button>
+               </div>
+          </form>
+      </div>
+ </div>
+
+ <div class="offcanvas offcanvas-bottom" id="email" style="height:auto;">
+       <div class="offcanvas-body">
+           <form method='POST'>
+           	<div class="input-group gap-2">
+                {{ form.hidden_tag() }}
+				<input type="hidden" name="name" value="email">
+				{{ form.email(class="form-control") }}
+                <button type="submit" class="btn fw-bold">Done</button>
+               </div>
+          </form>
+      </div>
+ </div>
+
+  <div class="modal modal-sm" id="del">
       <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
           <div class="modal-body text-center">
-            <p>Are you sure you want to delete your profile?</p>
-            <a type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal" aria-label="Close">Cancel</a>
-            <a class="btn btn-danger btn-sm" href="{{url_for('user_delete',id=current_user.id)}}">Delete</a>
+            <p>Do you want to delete your account?</p>
+            <a type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">Cancel</a>
+            <a class="btn text-danger" href="{{url_for('user_delete',id=current_user.id)}}">Delete</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <div class="modal modal-sm" id="signout">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+          <div class="modal-body text-center">
+            <p>Do you want to sign out?</p>
+            <a type="button" class="btn" data-bs-dismiss="modal" aria-label="Close">No</a>
+            <a class="btn text-danger" href="/signout">Yes</a>
           </div>
         </div>
       </div>
